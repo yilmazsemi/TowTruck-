@@ -33,17 +33,17 @@
                 </p>
 
                 <!-- Hızlı Aksiyon Butonları -->
-                <div class="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                <div class="pt-2 flex flex-row flex-wrap items-center gap-4">
                     <!-- Ara Butonu -->
-                    <a href="tel:{{ settings.primary_phone }}" class="px-6 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black text-base rounded-xl shadow-xl shadow-amber-500/30 flex items-center justify-center gap-3 transition-transform hover:-translate-y-0.5">
-                        <i class="fa-solid fa-phone text-xl"></i>
-                        <span>HEMEN ARA: {{ settings.primary_phone }}</span>
+                    <a href="tel:{{ settings.primary_phone }}" class="whitespace-nowrap px-6 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black text-base rounded-xl shadow-xl shadow-amber-500/30 flex items-center justify-center gap-3 transition-transform hover:-translate-y-0.5">
+                        <i class="fa-solid fa-phone text-xl shrink-0"></i>
+                        <span class="whitespace-nowrap">HEMEN ARA: {{ settings.primary_phone }}</span>
                     </a>
 
                     <!-- WhatsApp Konum Butonu -->
-                    <a href="https://wa.me/{{ settings.whatsapp_number }}?text=Merhaba,%20çekici%20için%20bilgi%20almak%20istiyorum." target="_blank" class="px-6 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-base rounded-xl shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-3 transition-transform hover:-translate-y-0.5">
-                        <i class="fa-brands fa-whatsapp text-2xl"></i>
-                        <span>WhatsApp ile Bilgi Al & Konum At</span>
+                    <a href="https://wa.me/{{ settings.whatsapp_number }}?text=Merhaba,%20çekici%20için%20bilgi%20almak%20istiyorum." target="_blank" class="whitespace-nowrap px-6 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-base rounded-xl shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-3 transition-transform hover:-translate-y-0.5">
+                        <i class="fa-brands fa-whatsapp text-2xl shrink-0"></i>
+                        <span class="whitespace-nowrap">WhatsApp ile Bilgi Al & Konum At</span>
                     </a>
                 </div>
 
