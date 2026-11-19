@@ -1,0 +1,377 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Üst Uyarı Şerit Deseni -->
+<div class="h-2 caution-stripes-slim"></div>
+
+<!-- ==================== HERO BÖLÜMÜ ==================== -->
+<section class="relative bg-gradient-to-b from-gray-900 via-gray-900 to-gray-950 py-16 sm:py-24 overflow-hidden border-b border-gray-800">
+    <!-- Arka Plan Dekoratif Işıklar -->
+    <div class="absolute -top-40 -right-40 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute top-1/2 -left-40 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <!-- Sol Başlık & Butonlar -->
+            <div class="lg:col-span-7 space-y-6">
+                <!-- Şahsa Özel & Durum Etiketi -->
+                <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs sm:text-sm font-bold shadow-inner">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span>{{ settings.owner_name }} Güvencesiyle 7/24 Kesintisiz</span>
+                </div>
+
+                <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight uppercase font-heading">
+                    YOLDA MI KALDINIZ? <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-300">
+                        EN KISA SÜREDE
+                    </span> YANINIZDAYIZ!
+                </h1>
+
+                <p class="text-base sm:text-lg text-gray-300 max-w-2xl leading-relaxed">
+                    {{ settings.slogan }} Kaskolu hidrolik kayar kasa çekicimiz ile otomobil, SUV, minibüs ve ticari araçlarınız güvenle taşınır.
+                </p>
+
+                <!-- Hızlı Aksiyon Butonları -->
+                <div class="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                    <!-- Ara Butonu -->
+                    <a href="tel:{{ settings.primary_phone }}" class="px-6 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black text-base rounded-xl shadow-xl shadow-amber-500/30 flex items-center justify-center gap-3 transition-transform hover:-translate-y-0.5">
+                        <i class="fa-solid fa-phone text-xl"></i>
+                        <span>HEMEN ARA: {{ settings.primary_phone }}</span>
+                    </a>
+
+                    <!-- WhatsApp Konum Butonu -->
+                    <a href="https://wa.me/{{ settings.whatsapp_number }}?text=Merhaba,%20çekici%20için%20bilgi%20almak%20istiyorum." target="_blank" class="px-6 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-base rounded-xl shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-3 transition-transform hover:-translate-y-0.5">
+                        <i class="fa-brands fa-whatsapp text-2xl"></i>
+                        <span>WhatsApp ile Bilgi Al & Konum At</span>
+                    </a>
+                </div>
+
+                <!-- Güven & İstatistik Rozetleri -->
+                <div class="pt-6 grid grid-cols-3 gap-4 border-t border-gray-800/80 text-center sm:text-left">
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-black text-amber-400 font-heading">{{ settings.experience_years }}+ Yıl</div>
+                        <div class="text-xs text-gray-400 font-medium">Sektörel Tecrübe</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-black text-amber-400 font-heading">En Kısa Sürede</div>
+                        <div class="text-xs text-gray-400 font-medium">Hızlı İntikal</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-black text-amber-400 font-heading">{{ settings.completed_jobs }}</div>
+                        <div class="text-xs text-gray-400 font-medium">Kazasız Kurtarma</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sağ: Şahsa Özel Kurtarma Yetkili Kartı -->
+            <div class="lg:col-span-5">
+                <div class="glass-card rounded-2xl p-6 sm:p-8 border border-amber-500/30 shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 caution-stripes opacity-15 rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-16 h-16 rounded-2xl bg-amber-500 text-black flex items-center justify-center text-3xl font-black shadow-lg">
+                            <i class="fa-solid fa-id-card-clip"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-amber-400 font-bold">Özel Çekici Operatörü</span>
+                            <h3 class="text-xl sm:text-2xl font-black text-white">{{ settings.owner_name }}</h3>
+                            <span class="text-xs text-gray-400 flex items-center gap-1.5 mt-0.5">
+                                <i class="fa-solid fa-circle-check text-emerald-400"></i> Lisanslı & Sigortalı Taşıyıcı
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3.5 mb-6 text-sm">
+                        <div class="flex items-center justify-between p-3.5 rounded-xl bg-gray-800/80 border border-amber-500/40">
+                            <span class="text-gray-300 font-medium flex items-center gap-2"><i class="fa-solid fa-phone text-amber-500"></i> Telefon:</span>
+                            <a href="tel:{{ settings.primary_phone }}" class="text-amber-400 font-black text-base hover:underline">{{ settings.primary_phone }}</a>
+                        </div>
+                        <div class="flex items-center justify-between p-3.5 rounded-xl bg-gray-800/80 border border-gray-700/60">
+                            <span class="text-gray-400 flex items-center gap-2"><i class="fa-brands fa-whatsapp text-emerald-400 text-lg"></i> WhatsApp:</span>
+                            <a href="https://wa.me/{{ settings.whatsapp_number }}" target="_blank" class="text-emerald-400 font-bold hover:underline">Doğrudan Yazın</a>
+                        </div>
+                        <div class="flex items-center justify-between p-3.5 rounded-xl bg-gray-800/80 border border-gray-700/60">
+                            <span class="text-gray-400 flex items-center gap-2"><i class="fa-solid fa-map-location-dot text-amber-500"></i> Hizmet Bölgesi:</span>
+                            <span class="text-white font-semibold">{{ settings.service_city }}</span>
+                        </div>
+                    </div>
+
+                    <a href="tel:{{ settings.primary_phone }}" class="w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-sm rounded-xl flex items-center justify-center gap-2 transition-colors uppercase tracking-wider shadow-lg shadow-amber-500/20">
+                        <i class="fa-solid fa-phone"></i> HEMEN ARA: {{ settings.primary_phone }}
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ==================== HİZMETLER BÖLÜMÜ ==================== -->
+<section id="hizmetler" class="py-20 bg-gray-950 border-b border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <span class="text-amber-500 font-bold uppercase tracking-widest text-xs">Profesyonel Kurtarma Filosu</span>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-2 font-heading">
+                Verdiğimiz Çekici & Kurtarma Hizmetleri
+            </h2>
+            <p class="text-gray-400 mt-3 text-sm sm:text-base">
+                Her türlü araç tipi ve acil durum senaryosuna uygun donanımlı araçlarımızla 365 gün hizmetinizdeyiz.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <!-- Hizmet 1 -->
+            <div class="glass-card glass-card-hover rounded-2xl p-7 flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center text-2xl mb-5">
+                        <i class="fa-solid fa-truck-pickup"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Oto Çekici & Kurtarma</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Arıza, kaza veya yolda kalma anında çekicimizi anında yönlendiriyoruz. En kısa sürede bulunduğunuz noktadayız.
+                    </p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-gray-800 text-xs font-semibold text-amber-500 flex items-center gap-1">
+                    <i class="fa-solid fa-bolt"></i> En Kısa Sürede İntikal
+                </div>
+            </div>
+
+            <!-- Hizmet 2 -->
+            <div class="glass-card glass-card-hover rounded-2xl p-7 flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-2xl mb-5">
+                        <i class="fa-solid fa-road"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Şehirler Arası Çekici</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Şehirler arası taşıma taleplerinde WhatsApp üzerinden konum ve araç bilgisi alıp karşılıklı görüşüyoruz; planlama netleştikten sonra yola çıkılır.
+                    </p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-gray-800 text-xs font-semibold text-emerald-400 flex items-center gap-1">
+                    <i class="fa-brands fa-whatsapp"></i> WhatsApp'tan Bilgi Alın
+                </div>
+            </div>
+
+            <!-- Hizmet 3 (Kaskolu Kayar Kasa) -->
+            <div class="glass-card glass-card-hover rounded-2xl p-7 flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center text-2xl mb-5">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Kaskolu Kayar Kasa Taşıma</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Hidrolik kayar kasa donanımımız ile aracınız yüklenirken ve taşınırken sürtünme veya tampon hasarı riski olmadan %100 güvenceyle taşınır.
+                    </p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-gray-800 text-xs font-semibold text-amber-500 flex items-center gap-1">
+                    <i class="fa-solid fa-shield"></i> Sıfır Hasar Garantisi
+                </div>
+            </div>
+
+            <!-- Hizmet 4 -->
+            <div class="glass-card glass-card-hover rounded-2xl p-7 flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center text-2xl mb-5">
+                        <i class="fa-solid fa-car-battery"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Akü Takviye & Yol Yardım</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Aküsü biten veya yolda kalan araçlar için takviye cihazları ile olay yerinde destek ve acil yardım hizmeti.
+                    </p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-gray-800 text-xs font-semibold text-cyan-400 flex items-center gap-1">
+                    <i class="fa-solid fa-wrench"></i> Yerinde Hızlı Çözüm
+                </div>
+            </div>
+
+            <!-- Hizmet 5 -->
+            <div class="glass-card glass-card-hover rounded-2xl p-7 flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center text-2xl mb-5">
+                        <i class="fa-solid fa-truck-moving"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Ağır Vasıta & Ticari Çekici</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Minibüs, panelvan, kamyonet ve karavan tipi araçlar için yüksek taşıma kapasiteli güçlü donanım.
+                    </p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-gray-800 text-xs font-semibold text-amber-500 flex items-center gap-1">
+                    <i class="fa-solid fa-weight-hanging"></i> Ticari Araç Uyumlu
+                </div>
+            </div>
+
+            <!-- Hizmet 6 -->
+            <div class="glass-card glass-card-hover rounded-2xl p-7 flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center text-2xl mb-5">
+                        <i class="fa-solid fa-gem"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Lüks & Spor Araç Taşıma</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Alçak şaseli spor otomobiller ve klasik araçlar için özel rampa açıları ve tampon hasarını önleyen donanımlar.
+                    </p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-gray-800 text-xs font-semibold text-purple-400 flex items-center gap-1">
+                    <i class="fa-solid fa-award"></i> VIP Taşıma
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ==================== GALERİ ÖNİZLEME ==================== -->
+<section id="galeri" class="py-20 bg-gray-950 border-b border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+            <div>
+                <span class="text-amber-500 font-bold uppercase tracking-widest text-xs">Sahadan Kareler</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-2 font-heading">
+                    Kurtarma & Taşıma Galerisi
+                </h2>
+                <p class="text-gray-400 mt-2 text-sm">
+                    Emir Süzen tarafından bizzat sahada çekilen ve güvenle taşınan araçların fotoğrafları.
+                </p>
+            </div>
+            <a href="{{ url_for('gallery') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-amber-400 border border-gray-700 font-bold text-sm transition-all self-start md:self-auto">
+                <span>Tüm Galeriyi Gör</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <!-- Galeri Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for item in gallery_items %}
+                <div class="gallery-card group relative rounded-2xl overflow-hidden bg-gray-900 border border-gray-800 shadow-lg cursor-pointer"
+                     onclick="openImageModal('{{ item.image_url }}', '{{ item.title }}', '{{ item.description or '' }}')">
+                    
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="{{ item.image_url }}" alt="{{ item.title }}" class="gallery-zoom-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+                        
+                        <!-- Kategori Rozeti -->
+                        <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/70 backdrop-blur-md text-amber-400 text-xs font-bold border border-amber-500/30">
+                            {{ item.category }}
+                        </span>
+
+                        <!-- Büyüt İkonu -->
+                        <span class="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/70 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fa-solid fa-magnifying-glass-plus text-xs"></i>
+                        </span>
+                    </div>
+
+                    <div class="p-5 relative">
+                        <h3 class="text-base font-bold text-white group-hover:text-amber-400 transition-colors">
+                            {{ item.title }}
+                        </h3>
+                        {% if item.description %}
+                            <p class="text-xs text-gray-400 mt-1 line-clamp-2">
+                                {{ item.description }}
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
+
+<!-- ==================== HAKKIMIZDA & ŞAHSA ÖZEL BİLGİ ==================== -->
+<section id="hakkimizda" class="py-20 bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
+            <div class="space-y-6">
+                <span class="text-amber-500 font-bold uppercase tracking-widest text-xs">Biz Kimiz?</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white font-heading">
+                    {{ settings.business_title }}
+                </h2>
+                <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                    {{ settings.about_text }}
+                </p>
+                <div class="p-5 rounded-2xl bg-gray-800/80 border-l-4 border-amber-500">
+                    <p class="text-xs sm:text-sm text-gray-300 italic">
+                        "Oto çekici hizmeti sadece aracı bir yerden bir yere taşımak değildir; yolda kalan insanın stresini almak, aracına kendi aracı gibi gözü gibi bakmaktır."
+                    </p>
+                    <div class="mt-3 text-sm font-bold text-amber-400">
+                        — {{ settings.owner_name }}, Kurucu
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <div class="flex items-center gap-2 text-sm text-gray-300">
+                        <i class="fa-solid fa-circle-check text-emerald-400"></i> Hızlı İntikal
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-gray-300">
+                        <i class="fa-solid fa-circle-check text-emerald-400"></i> IBAN veya Nakit Ödeme
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-gray-300">
+                        <i class="fa-solid fa-circle-check text-emerald-400"></i> Kaskolu & Güvenli Taşıma
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sağ: İletişim & Konum Bilgi Kutusu -->
+            <div id="iletisim" class="glass-card rounded-3xl p-8 border border-gray-800 shadow-2xl">
+                <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-address-book text-amber-500"></i> İletişim Bilgileri
+                </h3>
+
+                <div class="space-y-5">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 block font-semibold">Yetkili Kişi</span>
+                            <span class="text-white font-bold text-base">{{ settings.owner_name }}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-phone text-amber-500"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 block font-semibold">Telefon Numarası</span>
+                            <a href="tel:{{ settings.primary_phone }}" class="text-amber-400 font-black text-xl hover:underline">{{ settings.primary_phone }}</a>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-brands fa-whatsapp text-2xl text-emerald-400"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 block font-semibold">WhatsApp Bilgi & Konum</span>
+                            <a href="https://wa.me/{{ settings.whatsapp_number }}" target="_blank" class="text-emerald-400 font-bold hover:underline">WhatsApp'tan Bilgi Alın</a>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 block font-semibold">Merkez / Garaj Adresi</span>
+                            <span class="text-gray-300 text-sm">{{ settings.address }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-gray-800">
+                    <a href="tel:{{ settings.primary_phone }}" class="w-full py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black text-sm rounded-xl flex items-center justify-center gap-2 uppercase tracking-wider shadow-lg shadow-amber-500/20">
+                        <i class="fa-solid fa-phone"></i> HEMEN ARA: {{ settings.primary_phone }}
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

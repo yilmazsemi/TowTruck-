@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ settings.business_title }} | 7/24 Acil Oto Kurtarma & Çekici{% endblock %}</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+
+    <meta name="description" content="{{ settings.slogan }} - 7/24 Hızlı, Güvenli ve Kaskolu Oto Çekici Hizmeti">
+    <meta name="theme-color" content="#F59E0B">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        amberCustom: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                        },
+                        darkCustom: {
+                            900: '#0b0f19',
+                            800: '#111827',
+                            700: '#1f2937',
+                            600: '#374151'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        heading: ['Montserrat', 'Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex flex-col selection:bg-amber-500 selection:text-black">
+
+    <!-- Acil Durum / En Üst Bilgi Barı -->
+    <div class="bg-amber-500 text-black py-1.5 px-4 text-xs sm:text-sm font-semibold tracking-wide shadow-md">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+            <div class="flex items-center gap-3">
+                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-black/15 text-black font-bold uppercase tracking-wider text-[11px] animate-pulse">
+                    <span class="w-2 h-2 rounded-full bg-red-600"></span> 7/24 Nöbetçi Çekici
+                </span>
+                <span class="hidden md:inline"><i class="fa-solid fa-location-dot mr-1"></i> {{ settings.service_city }}</span>
+            </div>
+            <div class="flex items-center gap-4 text-xs sm:text-sm font-bold">
+                <a href="tel:{{ settings.primary_phone }}" class="hover:underline flex items-center gap-1">
+                    <i class="fa-solid fa-phone-volume"></i> {{ settings.primary_phone }}
+                </a>
+                <span class="hidden sm:inline">|</span>
+                <a href="https://wa.me/{{ settings.whatsapp_number }}" target="_blank" class="hover:underline flex items-center gap-1 text-green-950">
+                    <i class="fa-brands fa-whatsapp text-base"></i> WhatsApp İhbar
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ana Navigasyon / Header -->
+    <header class="bg-gray-900/95 backdrop-blur-md sticky top-0 z-50 border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo & Şahıs Markası -->
+                <a href="{{ url_for('index') }}" class="flex items-center gap-3 group">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-amber-600 to-amber-400 flex items-center justify-center text-black font-black text-2xl shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-truck-pickup"></i>
+                    </div>
+                    <div>
+                        <span class="block text-lg sm:text-xl font-extrabold text-white tracking-tight leading-tight group-hover:text-amber-400 transition-colors">
+                            {{ settings.business_title }}
+                        </span>
+                        <span class="text-xs text-amber-500 font-semibold tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-user-shield text-[10px]"></i> {{ settings.owner_name }}
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Masaüstü Menü -->
+                <nav class="hidden lg:flex items-center gap-6 font-medium text-sm">
+                    <a href="{{ url_for('index') }}" class="text-gray-300 hover:text-amber-400 transition-colors py-2">Ana Sayfa</a>
+                    <a href="{{ url_for('index') }}#hizmetler" class="text-gray-300 hover:text-amber-400 transition-colors py-2">Hizmetlerimiz</a>
+                    <a href="{{ url_for('gallery') }}" class="text-gray-300 hover:text-amber-400 transition-colors py-2">Galeri</a>
+                    <a href="{{ url_for('index') }}#hakkimizda" class="text-gray-300 hover:text-amber-400 transition-colors py-2">Hakkımızda</a>
+                    <a href="{{ url_for('index') }}#iletisim" class="text-gray-300 hover:text-amber-400 transition-colors py-2">İletişim</a>
+                </nav>
+
+                <!-- Sağ Butonlar & Profil / Giriş -->
+                <div class="hidden sm:flex items-center gap-3">
+                    {% if current_user %}
+                        {% if current_user.role == 'admin' %}
+                            <a href="{{ url_for('admin_dashboard') }}" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs sm:text-sm rounded-lg flex items-center gap-2 shadow-lg shadow-amber-500/20 transition-all">
+                                <i class="fa-solid fa-gauge-high"></i> Yönetici Paneli
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('member_dashboard') }}" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-amber-400 border border-amber-500/30 font-bold text-xs sm:text-sm rounded-lg flex items-center gap-2 transition-all">
+                                <i class="fa-solid fa-user-circle"></i> {{ current_user.full_name }}
+                            </a>
+                        {% endif %}
+                        <a href="{{ url_for('logout') }}" title="Çıkış Yap" class="w-9 h-9 rounded-lg bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="px-4 py-2 text-gray-300 hover:text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-colors">
+                            <i class="fa-solid fa-arrow-right-to-bracket"></i> Giriş Yap
+                        </a>
+                        <a href="{{ url_for('register') }}" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-xs sm:text-sm font-semibold rounded-lg border border-gray-700 transition-all">
+                            Üye Ol
+                        </a>
+                        <a href="tel:{{ settings.primary_phone }}" class="px-4 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-extrabold text-xs sm:text-sm rounded-lg flex items-center gap-2 shadow-lg shadow-amber-500/30 transition-all">
+                            <i class="fa-solid fa-phone"></i> Hemen Ara
+                        </a>
+                    {% endif %}
+                </div>
+
+                <!-- Mobil Hamburger Menü Butonu -->
+                <button id="mobile-menu-btn" class="lg:hidden text-gray-400 hover:text-white p-2 rounded-lg bg-gray-800 focus:outline-none">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobil Menü Açılır Panel -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-gray-900 border-b border-gray-800 px-4 pt-2 pb-6 space-y-3">
+            <a href="{{ url_for('index') }}" class="block text-gray-200 hover:text-amber-400 py-2 border-b border-gray-800 font-medium">Ana Sayfa</a>
+            <a href="{{ url_for('index') }}#hizmetler" class="block text-gray-200 hover:text-amber-400 py-2 border-b border-gray-800 font-medium">Hizmetlerimiz</a>
+            <a href="{{ url_for('gallery') }}" class="block text-gray-200 hover:text-amber-400 py-2 border-b border-gray-800 font-medium">Galeri</a>
+            <a href="{{ url_for('index') }}#hakkimizda" class="block text-gray-200 hover:text-amber-400 py-2 border-b border-gray-800 font-medium">Hakkımızda</a>
+            <a href="{{ url_for('index') }}#iletisim" class="block text-gray-200 hover:text-amber-400 py-2 border-b border-gray-800 font-medium">İletişim</a>
+            
+            <div class="pt-3 flex flex-col gap-2">
+                {% if current_user %}
+                    {% if current_user.role == 'admin' %}
+                        <a href="{{ url_for('admin_dashboard') }}" class="w-full py-2.5 text-center bg-amber-500 text-black font-bold rounded-lg">
+                            <i class="fa-solid fa-gauge-high"></i> Yönetici Paneli
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('member_dashboard') }}" class="w-full py-2.5 text-center bg-gray-800 text-amber-400 border border-amber-500/40 font-bold rounded-lg">
+                            <i class="fa-solid fa-user-circle"></i> {{ current_user.full_name }} (Hesabım)
+                        </a>
+                    {% endif %}
+                    <a href="{{ url_for('logout') }}" class="w-full py-2 text-center bg-red-600/30 text-red-300 font-medium rounded-lg">
+                        <i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap
+                    </a>
+                {% else %}
+                    <div class="grid grid-cols-2 gap-2">
+                        <a href="{{ url_for('login') }}" class="py-2.5 text-center bg-gray-800 text-white font-semibold rounded-lg border border-gray-700">Giriş Yap</a>
+                        <a href="{{ url_for('register') }}" class="py-2.5 text-center bg-gray-800 text-white font-semibold rounded-lg border border-gray-700">Üye Ol</a>
+                    </div>
+                    <a href="tel:{{ settings.primary_phone }}" class="w-full py-3 text-center bg-amber-500 text-black font-extrabold rounded-lg shadow-lg flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-phone"></i> HEMEN ARA: {{ settings.primary_phone }}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <!-- Bildirim Mesajları (Flash) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 w-full">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="p-4 mb-3 rounded-xl border flex items-center justify-between shadow-lg 
+                        {% if category == 'success' %}bg-emerald-950/80 border-emerald-500/50 text-emerald-200
+                        {% elif category == 'danger' %}bg-rose-950/80 border-rose-500/50 text-rose-200
+                        {% elif category == 'warning' %}bg-amber-950/80 border-amber-500/50 text-amber-200
+                        {% else %}bg-blue-950/80 border-blue-500/50 text-blue-200{% endif %}">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid 
+                                {% if category == 'success' %}fa-circle-check text-emerald-400
+                                {% elif category == 'danger' %}fa-circle-exclamation text-rose-400
+                                {% elif category == 'warning' %}fa-triangle-exclamation text-amber-400
+                                {% else %}fa-circle-info text-blue-400{% endif %} text-lg"></i>
+                            <span class="font-medium text-sm sm:text-base">{{ message }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-white p-1">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Ana Gövde İçeriği -->
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Sabit Acil Arama & WhatsApp Yüzen Çubuğu (Mobil ve Masaüstü için) -->
+    <div class="fixed bottom-4 right-4 z-50 flex flex-col gap-3">
+        <!-- WhatsApp Butonu -->
+        <a href="https://wa.me/{{ settings.whatsapp_number }}?text=Merhaba,%20araç%20çekici%20hizmetine%20ihtiyacım%20var.%20Konumumu%20paylaşıyorum." 
+           target="_blank" 
+           title="WhatsApp ile Konum Gönder"
+           class="w-14 h-14 bg-emerald-500 hover:bg-emerald-400 text-white rounded-full flex items-center justify-center shadow-2xl shadow-emerald-600/50 transition-all hover:scale-110 group relative">
+            <i class="fa-brands fa-whatsapp text-3xl"></i>
+            <span class="absolute right-16 bg-gray-900 text-white text-xs font-bold py-1.5 px-3 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-md border border-gray-700 pointer-events-none">
+                WhatsApp İhbar Hattı
+            </span>
+        </a>
+
+        <!-- Telefon Çağrı Butonu -->
+        <a href="tel:{{ settings.primary_phone }}" 
+           title="Hemen Ara ({{ settings.primary_phone }})"
+           class="w-14 h-14 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black rounded-full flex items-center justify-center shadow-2xl shadow-amber-500/50 transition-all hover:scale-110 group relative">
+            <i class="fa-solid fa-phone text-2xl"></i>
+            <span class="absolute right-16 bg-gray-900 text-white text-xs font-bold py-1.5 px-3 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-md border border-gray-700 pointer-events-none">
+                Hemen Ara: {{ settings.primary_phone }}
+            </span>
+        </a>
+    </div>
+
+    <!-- Alt Bilgi / Footer -->
+    <footer class="bg-gray-950 border-t border-gray-800 text-gray-400 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Şirket / Şahıs Tanıtımı -->
+                <div class="md:col-span-2 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-amber-500 text-black flex items-center justify-center font-bold text-xl">
+                            <i class="fa-solid fa-truck-pickup"></i>
+                        </div>
+                        <span class="text-xl font-bold text-white tracking-tight">{{ settings.business_title }}</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed max-w-lg">
+                        {{ settings.about_text }}
+                    </p>
+                    <div class="flex items-center gap-2 text-sm text-amber-400 font-semibold">
+                        <i class="fa-solid fa-user-check"></i> Yetkili & Kurucu: <span class="text-white">{{ settings.owner_name }}</span>
+                    </div>
+                </div>
+
+                <!-- Hızlı Bağlantılar -->
+                <div>
+                    <h3 class="text-white font-bold text-base mb-4 uppercase tracking-wider text-sm border-l-2 border-amber-500 pl-2">Hızlı Erişim</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="{{ url_for('index') }}" class="hover:text-amber-400 transition-colors">Ana Sayfa</a></li>
+                        <li><a href="{{ url_for('gallery') }}" class="hover:text-amber-400 transition-colors">Kurtarma Galerisi</a></li>
+                        <li><a href="{{ url_for('index') }}#hizmetler" class="hover:text-amber-400 transition-colors">Hizmet Alanlarımız</a></li>
+                        <li><a href="{{ url_for('login') }}" class="hover:text-amber-400 transition-colors">Müşteri / Üye Girişi</a></li>
+                        <li><a href="{{ url_for('login') }}" class="hover:text-amber-400 transition-colors">Yönetici Paneli</a></li>
+                    </ul>
+                </div>
+
+                <!-- İletişim Bilgileri -->
+                <div>
+                    <h3 class="text-white font-bold text-base mb-4 uppercase tracking-wider text-sm border-l-2 border-amber-500 pl-2">İletişim</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-phone text-amber-500 mt-1"></i>
+                            <div>
+                                <div class="text-xs text-gray-500">Telefon / İletişim</div>
+                                <a href="tel:{{ settings.primary_phone }}" class="text-white font-extrabold text-base hover:text-amber-400">{{ settings.primary_phone }}</a>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-brands fa-whatsapp text-emerald-400 mt-1 text-base"></i>
+                            <div>
+                                <div class="text-xs text-gray-500">WhatsApp Bilgi Hattı</div>
+                                <a href="https://wa.me/{{ settings.whatsapp_number }}" target="_blank" class="text-emerald-400 font-bold hover:underline">Doğrudan Mesaj Gönder</a>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-location-dot text-amber-500 mt-1"></i>
+                            <span class="text-gray-300">{{ settings.address }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Telif & Güvenlik -->
+            <div class="border-t border-gray-800/80 mt-10 pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-gray-500 gap-4">
+                <p>&copy; 2026 {{ settings.business_title }}. Tüm hakları saklıdır. Lisanslı ve Sigortalı Araç Çekici Hizmetleri.</p>
+                <div class="flex items-center gap-4">
+                    <span class="flex items-center gap-1 text-emerald-400"><i class="fa-solid fa-shield-halved"></i> %100 Kaskolu Taşıma</span>
+                    <span>|</span>
+                    <span class="text-amber-400">Emir Oto Kurtarma Özel Web Sistemi</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

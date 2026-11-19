@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#0F172A"/>
+  <!-- Tow truck yellow icon -->
+  <path d="M12 38h4v4h-4zm24 0h4v4h-4z" fill="#F59E0B"/>
+  <path d="M46 30h-6V22H24v12H10v8h4a6 6 0 0 0 12 0h12a6 6 0 0 0 12 0h4v-8l-6-4zm-28 6H12v-4h6v4zm8-10h10v4H26v-4zm18 10h-4v-4h3.2l2.4 1.6V36z" fill="#F59E0B"/>
+  <circle cx="20" cy="42" r="3" fill="#DC2626"/>
+  <circle cx="44" cy="42" r="3" fill="#DC2626"/>
+  <!-- Crane arm -->
+  <line x1="20" y1="22" x2="8" y2="14" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="8" cy="14" r="2" fill="#DC2626"/>
+</svg>

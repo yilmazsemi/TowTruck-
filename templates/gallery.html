@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Kurtarma Galerisi | {{ settings.business_title }}{% endblock %}
+
+{% block content %}
+<div class="h-2 caution-stripes-slim"></div>
+
+<div class="py-12 bg-gray-900 border-b border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto">
+            <span class="text-amber-500 font-bold uppercase tracking-widest text-xs">Fotoğraf Galerisi</span>
+            <h1 class="text-3xl sm:text-5xl font-extrabold text-white mt-2 font-heading">
+                Kurtarma & Çekici Çalışmalarımız
+            </h1>
+            <p class="text-gray-400 mt-3 text-sm sm:text-base">
+                Yönetim ekibimiz tarafından sahada kaydedilen gerçek kurtarma, taşıma ve yol yardım fotoğrafları.
+            </p>
+        </div>
+
+        <!-- Kategori Filtre Butonları -->
+        <div class="flex flex-wrap items-center justify-center gap-2 mt-8">
+            <a href="{{ url_for('gallery', category='all') }}" 
+               class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all 
+               {% if selected_category == 'all' %}bg-amber-500 text-black shadow-lg shadow-amber-500/25{% else %}bg-gray-800 text-gray-300 hover:bg-gray-700{% endif %}">
+                Tüm Fotoğraflar
+            </a>
+            {% for cat in categories %}
+                <a href="{{ url_for('gallery', category=cat.category) }}" 
+                   class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all 
+                   {% if selected_category == cat.category %}bg-amber-500 text-black shadow-lg shadow-amber-500/25{% else %}bg-gray-800 text-gray-300 hover:bg-gray-700{% endif %}">
+                    {{ cat.category }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="py-16 bg-gray-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {% if items %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for item in items %}
+                    <div class="gallery-card group relative rounded-2xl overflow-hidden bg-gray-900 border border-gray-800 shadow-xl cursor-pointer"
+                         onclick="openImageModal('{{ item.image_url }}', '{{ item.title }}', '{{ item.description or '' }}')">
+                        
+                        <div class="h-64 sm:h-72 overflow-hidden relative">
+                            <img src="{{ item.image_url }}" alt="{{ item.title }}" class="gallery-zoom-img w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/20 to-transparent opacity-80 group-hover:opacity-95 transition-opacity"></div>
+                            
+                            <!-- Kategori Rozeti -->
+                            <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/70 backdrop-blur-md text-amber-400 text-xs font-bold border border-amber-500/30">
+                                {{ item.category }}
+                            </span>
+
+                            <!-- Büyüt İkonu -->
+                            <span class="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/70 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i class="fa-solid fa-magnifying-glass-plus"></i>
+                            </span>
+
+                            <div class="absolute bottom-3 left-3 right-3">
+                                <span class="text-[11px] text-gray-400 block"><i class="fa-solid fa-calendar-days mr-1"></i> {{ item.created_at[:10] }}</span>
+                                <h3 class="text-base sm:text-lg font-bold text-white group-hover:text-amber-400 transition-colors mt-0.5">
+                                    {{ item.title }}
+                                </h3>
+                            </div>
+                        </div>
+
+                        {% if item.description %}
+                            <div class="p-4 bg-gray-900/90 border-t border-gray-800 text-xs text-gray-400">
+                                {{ item.description }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-20 bg-gray-900 rounded-3xl border border-gray-800 max-w-lg mx-auto">
+                <i class="fa-solid fa-images text-4xl text-gray-600 mb-3"></i>
+                <h3 class="text-lg font-bold text-white">Bu kategoride henüz fotoğraf yok</h3>
+                <p class="text-sm text-gray-400 mt-1">Yönetici panelinden yeni fotoğraflar ekleyebilirsiniz.</p>
+                <a href="{{ url_for('gallery') }}" class="mt-4 inline-block px-4 py-2 bg-amber-500 text-black font-bold text-xs rounded-lg">Tüm Fotoğraflara Dön</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

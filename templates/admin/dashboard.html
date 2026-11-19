@@ -1,0 +1,529 @@
+{% extends "base.html" %}
+
+{% block title %}Yönetici Paneli | {{ settings.business_title }}{% endblock %}
+
+{% block content %}
+<div class="h-2 caution-stripes"></div>
+
+<div class="py-8 bg-gray-950 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Üst Başlık & Yönetici Karşılama -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-gray-800 gap-4">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xs uppercase tracking-wider">
+                        👑 Yönetici Kontrol Merkezi
+                    </span>
+                    <span class="text-xs text-gray-500">• 7/24 Aktif Sistem</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-black text-white mt-1 font-heading">
+                    Hoş Geldiniz, Sayın {{ settings.owner_name }}
+                </h1>
+                <p class="text-xs sm:text-sm text-gray-400">
+                    Gelen çekici taleplerini yönetin, galeriye resim ekleyin ve şahsi iletişim numaralarınızı güncelleyin.
+                </p>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <a href="{{ url_for('index') }}" target="_blank" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 text-xs sm:text-sm font-semibold rounded-xl border border-gray-700 flex items-center gap-2 transition-colors">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Web Sitesini Gör
+                </a>
+                <a href="{{ url_for('logout') }}" class="px-4 py-2 bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white text-xs sm:text-sm font-semibold rounded-xl flex items-center gap-2 transition-colors">
+                    <i class="fa-solid fa-power-off"></i> Çıkış
+                </a>
+            </div>
+        </div>
+
+        <!-- İstatistik Kartları -->
+        <div class="grid grid-cols-2 lg:grid-cols-6 gap-4 my-8">
+            <div class="glass-card rounded-2xl p-4 border border-gray-800">
+                <span class="text-gray-400 text-xs font-medium block">Toplam Talep</span>
+                <span class="text-2xl font-black text-white mt-1 block">{{ stats.total_requests }}</span>
+            </div>
+            <div class="glass-card rounded-2xl p-4 border border-amber-500/30 bg-amber-500/5">
+                <span class="text-amber-400 text-xs font-bold block flex items-center gap-1">
+                    <i class="fa-solid fa-bell animate-bounce"></i> Bekleyen
+                </span>
+                <span class="text-2xl font-black text-amber-400 mt-1 block">{{ stats.pending_requests }}</span>
+            </div>
+            <div class="glass-card rounded-2xl p-4 border border-blue-500/30 bg-blue-500/5">
+                <span class="text-blue-400 text-xs font-bold block flex items-center gap-1">
+                    <i class="fa-solid fa-truck-moving"></i> Yolda Olan
+                </span>
+                <span class="text-2xl font-black text-blue-400 mt-1 block">{{ stats.on_the_way }}</span>
+            </div>
+            <div class="glass-card rounded-2xl p-4 border border-emerald-500/30 bg-emerald-500/5">
+                <span class="text-emerald-400 text-xs font-bold block flex items-center gap-1">
+                    <i class="fa-solid fa-check"></i> Tamamlanan
+                </span>
+                <span class="text-2xl font-black text-emerald-400 mt-1 block">{{ stats.completed_requests }}</span>
+            </div>
+            <div class="glass-card rounded-2xl p-4 border border-gray-800">
+                <span class="text-gray-400 text-xs font-medium block">Galeri Fotoğrafları</span>
+                <span class="text-2xl font-black text-white mt-1 block">{{ stats.total_photos }}</span>
+            </div>
+            <div class="glass-card rounded-2xl p-4 border border-gray-800">
+                <span class="text-gray-400 text-xs font-medium block">Kayıtlı Üyeler</span>
+                <span class="text-2xl font-black text-white mt-1 block">{{ stats.total_members }}</span>
+            </div>
+        </div>
+
+        <!-- Yönetici Tab Menüsü -->
+        <div class="flex border-b border-gray-800 mb-8 space-x-2 overflow-x-auto">
+            <button onclick="switchTab('requests')" id="tab-btn-requests" class="admin-tab-btn active px-5 py-3 font-bold text-sm border-b-2 border-amber-500 text-amber-400 flex items-center gap-2 whitespace-nowrap">
+                <i class="fa-solid fa-truck-pickup"></i> Çekici Talepleri ({{ requests|length }})
+            </button>
+            <button onclick="switchTab('gallery')" id="tab-btn-gallery" class="admin-tab-btn px-5 py-3 font-bold text-sm border-b-2 border-transparent text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap">
+                <i class="fa-solid fa-camera-retro"></i> Çekilen Araç Fotoğrafları ({{ gallery_items|length }})
+            </button>
+            <button onclick="switchTab('settings')" id="tab-btn-settings" class="admin-tab-btn px-5 py-3 font-bold text-sm border-b-2 border-transparent text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap">
+                <i class="fa-solid fa-sliders"></i> Şahsa Özel & İletişim Ayarları
+            </button>
+            <button onclick="switchTab('members')" id="tab-btn-members" class="admin-tab-btn px-5 py-3 font-bold text-sm border-b-2 border-transparent text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap">
+                <i class="fa-solid fa-users"></i> Kayıtlı Üyeler ({{ members|length }})
+            </button>
+        </div>
+
+        <!-- ==================== TAB 1: ÇEKİCİ TALEPLERİ ==================== -->
+        <div id="tab-requests" class="admin-tab-content space-y-6">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-amber-500"></i> Gelen Çekici Çağrıları
+                </h2>
+                <span class="text-xs text-gray-400">Son 20 talep listeleniyor</span>
+            </div>
+
+            {% if requests %}
+                <div class="grid grid-cols-1 gap-4">
+                    {% for req in requests %}
+                        <div class="glass-card rounded-2xl p-6 border 
+                            {% if req.status == 'Beklemede' %}border-amber-500/50 bg-amber-950/10
+                            {% elif req.status == 'Yolda' %}border-blue-500/50 bg-blue-950/10
+                            {% elif req.status == 'Tamamlandı' %}border-emerald-500/30
+                            {% else %}border-gray-800{% endif %}">
+                            
+                            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-gray-800">
+                                <div>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-xs font-mono font-bold text-gray-400">#{{ req.id }}</span>
+                                        <h3 class="text-lg font-bold text-white">{{ req.full_name }}</h3>
+                                        
+                                        <!-- Durum Rozeti -->
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold 
+                                            {% if req.status == 'Beklemede' %}bg-amber-500/20 text-amber-400 border border-amber-500/40
+                                            {% elif req.status == 'Yolda' %}bg-blue-500/20 text-blue-400 border border-blue-500/40 animate-pulse
+                                            {% elif req.status == 'Tamamlandı' %}bg-emerald-500/20 text-emerald-400 border border-emerald-500/40
+                                            {% else %}bg-gray-700 text-gray-300{% endif %}">
+                                            {{ req.status }}
+                                        </span>
+
+                                        {% if req.member_username %}
+                                            <span class="text-[11px] px-2 py-0.5 rounded bg-gray-800 text-gray-300 border border-gray-700">
+                                                <i class="fa-solid fa-user-check text-amber-400"></i> Üye: @{{ req.member_username }}
+                                            </span>
+                                        {% else %}
+                                            <span class="text-[11px] px-2 py-0.5 rounded bg-gray-800/60 text-gray-400">
+                                                Ziyaretçi
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="text-xs text-gray-400 mt-1 flex items-center gap-2">
+                                        <i class="fa-regular fa-clock"></i> {{ req.created_at }}
+                                    </div>
+                                </div>
+
+                                <!-- Hızlı Arama Butonları -->
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <a href="tel:{{ req.phone }}" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs rounded-lg flex items-center gap-1.5 shadow-md">
+                                        <i class="fa-solid fa-phone"></i> {{ req.phone }}
+                                    </a>
+                                    <a href="https://wa.me/{{ req.phone|replace(' ', '')|replace('-', '')|replace('(', '')|replace(')', '') }}" target="_blank" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg flex items-center gap-1.5">
+                                        <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Talep Detayları -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4 text-xs sm:text-sm">
+                                <div class="p-3 rounded-xl bg-gray-800/60">
+                                    <span class="text-gray-400 block text-xs">Alınacak Konum:</span>
+                                    <span class="text-white font-semibold flex items-center gap-1 mt-0.5">
+                                        <i class="fa-solid fa-location-crosshairs text-red-400"></i> {{ req.location_from }}
+                                    </span>
+                                </div>
+
+                                <div class="p-3 rounded-xl bg-gray-800/60">
+                                    <span class="text-gray-400 block text-xs">Teslim Noktası:</span>
+                                    <span class="text-white font-semibold flex items-center gap-1 mt-0.5">
+                                        <i class="fa-solid fa-flag-checkered text-emerald-400"></i> {{ req.location_to or 'Belirtilmedi' }}
+                                    </span>
+                                </div>
+
+                                <div class="p-3 rounded-xl bg-gray-800/60">
+                                    <span class="text-gray-400 block text-xs">Araç / Arıza:</span>
+                                    <span class="text-white font-semibold flex items-center gap-1 mt-0.5">
+                                        <i class="fa-solid fa-car text-amber-400"></i> {{ req.car_info or 'Bilgi yok' }}
+                                    </span>
+                                    {% if req.issue_description %}
+                                        <span class="text-gray-400 text-xs block mt-1">"{{ req.issue_description }}"</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Eklenen Fotoğraf (Varsa) -->
+                            {% if req.image_url %}
+                                <div class="my-3 p-3 bg-gray-800/80 rounded-xl flex items-center justify-between border border-gray-700">
+                                    <div class="flex items-center gap-3">
+                                        <img src="{{ req.image_url }}" alt="Araç Fotoğrafı" class="w-14 h-14 object-cover rounded-lg border border-amber-500/40">
+                                        <div>
+                                            <span class="text-xs font-bold text-white block">Müşteri Araç Fotoğrafı Ekledi</span>
+                                            <span class="text-[11px] text-gray-400">Detayları incelemek için büyütün</span>
+                                        </div>
+                                    </div>
+                                    <button type="button" onclick="openImageModal('{{ req.image_url }}', '{{ req.full_name }} - Araç Fotoğrafı', '{{ req.car_info or '' }}')" class="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 text-white font-bold text-xs rounded-lg">
+                                        <i class="fa-solid fa-magnifying-glass"></i> Fotoğrafı Aç
+                                    </button>
+                                </div>
+                            {% endif %}
+
+                            <!-- Durum Güncelleme Formu -->
+                            <form action="{{ url_for('admin_update_request_status', req_id=req.id) }}" method="POST" class="mt-4 pt-4 border-t border-gray-800/80 flex flex-wrap items-center gap-3">
+                                <span class="text-xs font-bold text-gray-400">Durumu Değiştir:</span>
+                                
+                                <select name="status" class="px-3 py-1.5 bg-gray-800 border border-gray-700 rounded-lg text-xs font-bold text-white focus:outline-none focus:border-amber-500">
+                                    <option value="Beklemede" {% if req.status == 'Beklemede' %}selected{% endif %}>Beklemede</option>
+                                    <option value="Yolda" {% if req.status == 'Yolda' %}selected{% endif %}>Yolda (Çekici İntikalde)</option>
+                                    <option value="Tamamlandı" {% if req.status == 'Tamamlandı' %}selected{% endif %}>Tamamlandı</option>
+                                    <option value="İptal Edildi" {% if req.status == 'İptal Edildi' %}selected{% endif %}>İptal Edildi</option>
+                                </select>
+
+                                <input type="text" name="admin_notes" value="{{ req.admin_notes or '' }}" placeholder="Yönetici Notu (Örn: Çekici #2 yönlendirildi)" class="flex-grow px-3 py-1.5 bg-gray-800 border border-gray-700 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-amber-500">
+
+                                <button type="submit" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs rounded-lg transition-colors">
+                                    Kaydet
+                                </button>
+
+                                <button type="submit" formaction="{{ url_for('admin_delete_request', req_id=req.id) }}" onclick="return confirm('Bu talebi silmek istediğinize emin misiniz?')" class="p-1.5 text-gray-500 hover:text-red-400 text-xs transition-colors" title="Talebi Sil">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </form>
+
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-16 bg-gray-900 rounded-2xl border border-gray-800">
+                    <i class="fa-solid fa-inbox text-4xl text-gray-600 mb-3"></i>
+                    <h3 class="text-lg font-bold text-white">Henüz gelen çekici talebi bulunmuyor</h3>
+                    <p class="text-sm text-gray-400 mt-1">Müşteriler web sayfasındaki formu doldurduğunda burada anında görüntülenecektir.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- ==================== TAB 2: RESİM & GALERİ YÖNETİMİ ==================== -->
+        <div id="tab-gallery" class="admin-tab-content hidden space-y-8">
+            
+            <!-- Yeni Resim Ekleme Kartı -->
+            <div class="glass-card rounded-2xl p-6 sm:p-8 border border-amber-500/40 shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 caution-stripes opacity-10 rounded-bl-full pointer-events-none"></div>
+
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-14 h-14 rounded-2xl bg-amber-500 text-black flex items-center justify-center text-2xl font-black shadow-lg shadow-amber-500/20">
+                        <i class="fa-solid fa-camera"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold text-amber-400 uppercase tracking-wider block">Yönetici Fotoğraf Yükleme Paneli</span>
+                        <h2 class="text-xl sm:text-2xl font-black text-white">Çektiğiniz Araç Fotoğrafını Yükleyin</h2>
+                        <p class="text-xs text-gray-400 mt-0.5">Emir Süzen olarak sahada kurtardığınız veya transfer ettiğiniz araçların fotoğraflarını buradan web sitesine ekleyebilirsiniz.</p>
+                    </div>
+                </div>
+
+                <form action="{{ url_for('admin_add_gallery') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-2">
+                                Araç & Kurtarma Başlığı <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" name="title" required placeholder="Örn: 34 ABC 12 - BMW 320d Gece Kurtarma" class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 text-sm">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                                Kurtarma / İşlem Kategorisi
+                            </label>
+                            <select name="category" class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-amber-500 text-sm font-semibold">
+                                <option value="Oto Kurtarma">Oto Kurtarma</option>
+                                <option value="Kurtarma Operasyonu">Kurtarma Operasyonu</option>
+                                <option value="Şehirler Arası">Şehirler Arası Taşıma</option>
+                                <option value="Ağır Vasıta">Ağır Vasıta & Minibüs</option>
+                                <option value="Kayar Kasa">Kayar Kasa Taşıma</option>
+                                <option value="Lüks & Spor Araç">Lüks & Spor Araç Taşıma</option>
+                                <option value="Filo & Çekicilerimiz">Filomuz & Çekicimiz</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <!-- Dosya Yükleme -->
+                        <div class="p-4 rounded-xl bg-gray-800/70 border border-dashed border-amber-500/40">
+                            <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">
+                                <i class="fa-solid fa-file-arrow-up mr-1"></i> Telefon / Bilgisayardan Fotoğraf Seçin
+                            </label>
+                            <span class="text-[11px] text-gray-400 block mb-2">Çektiğiniz aracın net fotoğrafını seçin</span>
+                            <input type="file" name="gallery_image" accept="image/*" data-preview-target="admin-gallery-preview" class="block w-full text-xs text-gray-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black hover:file:bg-amber-400 cursor-pointer">
+                            <div id="admin-gallery-preview" class="hidden"></div>
+                        </div>
+
+                        <!-- Veya URL Bağlantısı -->
+                        <div class="p-4 rounded-xl bg-gray-800/40 border border-gray-700">
+                            <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1">
+                                VEYA İnternet Fotoğraf Linki (URL)
+                            </label>
+                            <span class="text-[11px] text-gray-400 block mb-2">Harici bir web linki girmek isterseniz</span>
+                            <input type="url" name="image_url" placeholder="https://..." class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 text-sm">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                            Açıklama / Not (İsteğe Bağlı)
+                        </label>
+                        <input type="text" name="description" placeholder="Örn: E-5 üzerinde arızalanan araç güvenle kayar kasaya alınarak yetkili servise ulaştırıldı." class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 text-sm">
+                    </div>
+
+                    <button type="submit" class="px-6 py-3.5 bg-amber-500 hover:bg-amber-400 text-black font-black text-sm rounded-xl uppercase tracking-wider shadow-lg shadow-amber-500/25 flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> FOTOĞRAFI SİTEYE YÜKLE & YAYINLA
+                    </button>
+                </form>
+            </div>
+
+            <!-- Mevcut Galeri Fotoğrafları Listesi -->
+            <div>
+                <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-photo-film text-amber-500"></i> Yayındaki Fotoğraflar ({{ gallery_items|length }})
+                </h3>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {% for item in gallery_items %}
+                        <div class="glass-card rounded-2xl overflow-hidden border border-gray-800 flex flex-col justify-between">
+                            <div class="relative h-48">
+                                <img src="{{ item.image_url }}" alt="{{ item.title }}" class="w-full h-full object-cover">
+                                <span class="absolute top-2 left-2 px-2.5 py-0.5 rounded-full bg-black/70 text-amber-400 text-[10px] font-bold">
+                                    {{ item.category }}
+                                </span>
+                            </div>
+                            <div class="p-4 flex-grow">
+                                <h4 class="text-sm font-bold text-white truncate">{{ item.title }}</h4>
+                                <p class="text-xs text-gray-400 mt-1 line-clamp-2">{{ item.description or 'Açıklama yok' }}</p>
+                            </div>
+                            <div class="p-4 pt-0 flex items-center justify-between border-t border-gray-800/60 mt-2">
+                                <span class="text-[11px] text-gray-500">{{ item.created_at[:10] }}</span>
+                                <form action="{{ url_for('admin_delete_gallery', item_id=item.id) }}" method="POST" onsubmit="return confirm('Bu fotoğrafı galeriden kaldırmak istediğinize emin misiniz?');">
+                                    <button type="submit" class="text-red-400 hover:text-red-300 text-xs font-bold flex items-center gap-1">
+                                        <i class="fa-solid fa-trash-can"></i> Sil
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ==================== TAB 3: ŞAHSA ÖZEL & İLETİŞİM AYARLARI ==================== -->
+        <div id="tab-settings" class="admin-tab-content hidden space-y-6">
+            <div class="glass-card rounded-2xl p-6 sm:p-8 border border-amber-500/30">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-user-gear"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Şahsa Özel & İletişim Bilgilerini Düzenle</h2>
+                        <p class="text-xs text-gray-400">Burada yapacağınız değişiklikler web sayfasının tüm alanlarında, butonlarında ve başlıklarında anında geçerli olur.</p>
+                    </div>
+                </div>
+
+                <form action="{{ url_for('admin_update_settings') }}" method="POST" class="space-y-6">
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <!-- Şahıs Adı Soyadı -->
+                        <div>
+                            <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-user-check"></i> Yetkili Ad Soyad (Şahsa Özel) <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" name="owner_name" required value="{{ settings.owner_name }}" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white font-bold focus:outline-none focus:border-amber-500 text-sm">
+                            <span class="text-[11px] text-gray-400 mt-1 block">Sayfa genelinde sizin şahsi adınız olarak gösterilir.</span>
+                        </div>
+
+                        <!-- Şirket / Başlık -->
+                        <div>
+                            <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-building"></i> İşletme Başlığı / Marka <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" name="business_title" required value="{{ settings.business_title }}" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white font-bold focus:outline-none focus:border-amber-500 text-sm">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <!-- İletişim Telefonu -->
+                        <div>
+                            <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-phone"></i> İletişim Telefon Numarası <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" name="primary_phone" required value="{{ settings.primary_phone }}" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white font-bold focus:outline-none focus:border-amber-500 text-sm">
+                            <input type="hidden" name="secondary_phone" value="">
+                        </div>
+
+                        <!-- WhatsApp -->
+                        <div>
+                            <label class="block text-xs font-bold text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                <i class="fa-brands fa-whatsapp text-base"></i> WhatsApp Numarası (Başında 90 ile) <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" name="whatsapp_number" required value="{{ settings.whatsapp_number }}" placeholder="905459553652" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white font-bold focus:outline-none focus:border-amber-500 text-sm">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <!-- Çalışma Bölgesi -->
+                        <div>
+                            <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                                Hizmet Verilen Şehir / Bölge
+                            </label>
+                            <input type="text" name="service_city" value="{{ settings.service_city }}" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-amber-500 text-sm">
+                        </div>
+
+                        <!-- Garaj / İstasyon Adresi -->
+                        <div>
+                            <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                                İstasyon / Garaj Adresi
+                            </label>
+                            <input type="text" name="address" value="{{ settings.address }}" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-amber-500 text-sm">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <!-- Tecrübe Yılı -->
+                        <div>
+                            <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                                Tecrübe (Yıl)
+                            </label>
+                            <input type="text" name="experience_years" value="{{ settings.experience_years }}" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-amber-500 text-sm">
+                        </div>
+
+                        <!-- Tamamlanan İş Sayısı -->
+                        <div>
+                            <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                                Tamamlanan Kurtarma Sayısı
+                            </label>
+                            <input type="text" name="completed_jobs" value="{{ settings.completed_jobs }}" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-amber-500 text-sm">
+                        </div>
+                    </div>
+
+                    <!-- Slogan -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                            Ana Sayfa Sloganı
+                        </label>
+                        <input type="text" name="slogan" value="{{ settings.slogan }}" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-amber-500 text-sm">
+                    </div>
+
+                    <!-- Hakkımızda Metni -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                            Hakkımızda Tanıtım Metni
+                        </label>
+                        <textarea name="about_text" rows="4" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-amber-500 text-sm leading-relaxed">{{ settings.about_text }}</textarea>
+                    </div>
+
+                    <button type="submit" class="px-8 py-4 bg-amber-500 hover:bg-amber-400 text-black font-black text-sm rounded-xl uppercase tracking-wider shadow-lg shadow-amber-500/25 flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-floppy-disk"></i> AYARLARI KAYDET VE SİTEDE YAYINLA
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ==================== TAB 4: KAYITLI ÜYELER ==================== -->
+        <div id="tab-members" class="admin-tab-content hidden space-y-6">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-users text-amber-500"></i> Kayıtlı Müşteri ve Üyeler
+                </h2>
+                <span class="text-xs text-gray-400">Toplam {{ members|length }} kayıtlı üye</span>
+            </div>
+
+            {% if members %}
+                <div class="glass-card rounded-2xl overflow-hidden border border-gray-800">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs sm:text-sm">
+                            <thead class="bg-gray-800/80 text-gray-400 uppercase tracking-wider text-[11px]">
+                                <tr>
+                                    <th class="p-4">ID</th>
+                                    <th class="p-4">Ad Soyad</th>
+                                    <th class="p-4">Kullanıcı Adı</th>
+                                    <th class="p-4">Telefon Numarası</th>
+                                    <th class="p-4">Kayıt Tarihi</th>
+                                    <th class="p-4">İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-800">
+                                {% for m in members %}
+                                    <tr class="hover:bg-gray-800/40">
+                                        <td class="p-4 font-mono font-bold text-gray-400">#{{ m.id }}</td>
+                                        <td class="p-4 font-bold text-white">{{ m.full_name }}</td>
+                                        <td class="p-4 text-amber-400 font-mono">@{{ m.username }}</td>
+                                        <td class="p-4 text-gray-300">
+                                            <a href="tel:{{ m.phone }}" class="hover:text-amber-400 flex items-center gap-1">
+                                                <i class="fa-solid fa-phone text-xs text-amber-500"></i> {{ m.phone }}
+                                            </a>
+                                        </td>
+                                        <td class="p-4 text-gray-400">{{ m.created_at[:16] }}</td>
+                                        <td class="p-4">
+                                            <a href="https://wa.me/{{ m.phone|replace(' ', '')|replace('-', '') }}" target="_blank" class="px-2.5 py-1 bg-emerald-600/30 text-emerald-400 hover:bg-emerald-600 hover:text-white rounded text-xs font-semibold inline-flex items-center gap-1 transition-colors">
+                                                <i class="fa-brands fa-whatsapp"></i> Mesaj
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% else %}
+                <div class="text-center py-16 bg-gray-900 rounded-2xl border border-gray-800">
+                    <i class="fa-solid fa-user-group text-4xl text-gray-600 mb-3"></i>
+                    <h3 class="text-lg font-bold text-white">Henüz kayıtlı üye yok</h3>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+<script>
+function switchTab(tabId) {
+    document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+        btn.classList.remove('active', 'border-amber-500', 'text-amber-400');
+        btn.classList.add('border-transparent', 'text-gray-400');
+    });
+
+    const activeTab = document.getElementById('tab-' + tabId);
+    const activeBtn = document.getElementById('tab-btn-' + tabId);
+    if (activeTab && activeBtn) {
+        activeTab.classList.remove('hidden');
+        activeBtn.classList.remove('border-transparent', 'text-gray-400');
+        activeBtn.classList.add('active', 'border-amber-500', 'text-amber-400');
+    }
+}
+
+// URL hash'e göre otomatik sekmeyi aç (Örn: #gallery veya #settings)
+window.addEventListener('DOMContentLoaded', () => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash && document.getElementById('tab-' + hash)) {
+        switchTab(hash);
+    }
+});
+</script>
+{% endblock %}
