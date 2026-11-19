@@ -67,7 +67,7 @@ def init_db():
 
     # Varsayılan site ayarları
     default_settings = {
-        'owner_name': 'Emir Süzen',
+        'owner_name': 'Emir Arpacı',
         'business_title': 'EMİR OTO KURTARMA & ÇEKİCİ HİZMETLERİ',
         'primary_phone': '+90 545 955 36 52',
         'secondary_phone': '',
@@ -75,7 +75,7 @@ def init_db():
         'service_city': 'Bağcılar / İstanbul & Çevre İller',
         'address': 'Yavuz Selim Mahallesi 3/4. Sokak No:14 Bağcılar / İstanbul',
         'slogan': 'Yolda Kaldığınızda Endişelenmeyin! En Kısa Sürede Yanınızdayız.',
-        'about_text': 'Emir Oto Kurtarma olarak; kaskolu ve hidrolik kayar kasa çekicimiz ile aracınız nerede olursa olsun en güvenli ve hızlı şekilde dilediğiniz noktaya ulaştırıyoruz. Emir Süzen güvencesiyle daima yanınızdayız.',
+        'about_text': 'Emir Oto Kurtarma olarak; kaskolu ve hidrolik kayar kasa çekicimiz ile aracınız nerede olursa olsun en güvenli ve hızlı şekilde dilediğiniz noktaya ulaştırıyoruz. Emir Arpacı güvencesiyle daima yanınızdayız.',
         'experience_years': '12',
         'completed_jobs': '4850+'
     }
@@ -90,7 +90,7 @@ def init_db():
         cursor.execute('''
             INSERT INTO users (username, password_hash, full_name, phone, role)
             VALUES (?, ?, ?, ?, ?)
-        ''', ('admin', admin_hash, 'Emir Süzen (Yönetici)', '+90 545 955 36 52', 'admin'))
+        ''', ('admin', admin_hash, 'Emir Arpacı (Yönetici)', '+90 545 955 36 52', 'admin'))
 
     # Örnek Standart Üye Hesabı: uye / 123456
     cursor.execute('SELECT id FROM users WHERE username = ?', ('uye',))

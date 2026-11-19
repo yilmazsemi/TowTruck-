@@ -13,7 +13,7 @@ class TowTruckTestCase(unittest.TestCase):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
         self.assertIn('YOLDA MI KALDINIZ'.encode('utf-8'), response.data)
-        self.assertIn('Emir Süzen'.encode('utf-8'), response.data)
+        self.assertIn('Emir Arpacı'.encode('utf-8'), response.data)
 
     def test_gallery_page(self):
         response = self.client.get('/gallery')
