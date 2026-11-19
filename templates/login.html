@@ -59,28 +59,6 @@
             </div>
         </div>
 
-        <!-- Kolay Test / Hızlı Doldurma Kutusu -->
-        <div class="mt-6 p-4 rounded-2xl bg-gray-900 border border-gray-800 text-xs text-gray-400">
-            <span class="font-bold text-amber-400 block mb-2"><i class="fa-solid fa-circle-info mr-1"></i> Hazır Giriş Bilgileri (Test için):</span>
-            <div class="grid grid-cols-2 gap-2">
-                <button type="button" onclick="fillLogin('admin', 'admin123')" class="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 border border-amber-500/30 text-left transition-colors">
-                    <span class="font-bold text-white block">👑 Yönetici Girişi</span>
-                    <span class="text-[11px] text-gray-400">admin / admin123</span>
-                </button>
-                <button type="button" onclick="fillLogin('uye', '123456')" class="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 border border-gray-700 text-left transition-colors">
-                    <span class="font-bold text-white block">👤 Normal Üye Girişi</span>
-                    <span class="text-[11px] text-gray-400">uye / 123456</span>
-                </button>
-            </div>
-        </div>
-
     </div>
 </div>
-
-<script>
-function fillLogin(user, pass) {
-    document.getElementById('username-field').value = user;
-    document.getElementById('password-field').value = pass;
-}
-</script>
 {% endblock %}
