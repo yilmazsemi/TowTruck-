@@ -1,5 +1,6 @@
 import os
 import uuid
+import urllib.parse
 from datetime import datetime
 from functools import wraps
 from flask import (
@@ -154,10 +155,35 @@ def request_tow():
     conn.commit()
     conn.close()
 
-    flash(f'Talebiniz başarıyla alındı! (Talep No: #{request_id}). Ekiplerimiz en kısa sürede sizi arayacaktır.', 'success')
-    if user_id:
-        return redirect(url_for('member_dashboard'))
-    return redirect(url_for('index') + '#talep-basarili')
+    # WhatsApp önceden doldurulmuş mesaj hazırlama
+    msg_lines = [
+        "Merhaba Emir Bey, web sitenizden size ulaşıyorum.",
+        "",
+        f"📋 Form Bilgilerim:",
+        f"👤 Adım: {full_name}",
+        f"📞 Telefon: {phone}",
+        f"📍 Bulunduğum Konum: {location_from}",
+    ]
+    if location_to:
+        msg_lines.append(f"🏁 Götürülecek Yer: {location_to}")
+    if car_info:
+        msg_lines.append(f"🚗 Araç Bilgisi: {car_info}")
+    if issue_description:
+        msg_lines.append(f"🔧 Sorun: {issue_description}")
+
+    msg_lines += [
+        "",
+        "Çekici talebim hakkında bilgi almak istiyorum. "
+    ]
+
+    msg_text = "\n".join(msg_lines)
+    encoded_msg = urllib.parse.quote(msg_text)
+
+    settings = get_settings()
+    wa_number = settings.get('whatsapp_number', '905459553652')
+    wa_url = f"https://wa.me/{wa_number}?text={encoded_msg}"
+
+    return redirect(wa_url)
 
 # ==================== AUTH ROUTES ====================
 
