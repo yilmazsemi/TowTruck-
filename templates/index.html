@@ -97,9 +97,14 @@
                         </div>
                     </div>
 
-                    <a href="tel:{{ settings.primary_phone }}" class="w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-sm rounded-xl flex items-center justify-center gap-2 transition-colors uppercase tracking-wider shadow-lg shadow-amber-500/20">
-                        <i class="fa-solid fa-phone"></i> HEMEN ARA: {{ settings.primary_phone }}
-                    </a>
+                    <div class="space-y-2.5">
+                        <a href="#cekici-cagir" class="w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-sm rounded-xl flex items-center justify-center gap-2 transition-colors uppercase tracking-wider shadow-lg shadow-amber-500/20">
+                            <i class="fa-solid fa-file-signature"></i> Online Çekici Talebi Oluştur
+                        </a>
+                        <a href="tel:{{ settings.primary_phone }}" class="w-full py-2.5 bg-gray-800 hover:bg-gray-700 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 border border-gray-700 transition-colors">
+                            <i class="fa-solid fa-phone text-amber-500"></i> Doğrudan Ara: {{ settings.primary_phone }}
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -220,6 +225,141 @@
             </div>
 
         </div>
+    </div>
+</section>
+
+<!-- ==================== ONLİNE ÇEKİCİ ÇAĞRI FORMU ==================== -->
+<section id="cekici-cagir" class="py-20 bg-gray-900 border-b border-gray-800 relative">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="glass-card rounded-3xl p-8 sm:p-12 border border-amber-500/40 shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-2.5 caution-stripes"></div>
+
+            <div class="text-center mb-10 pt-2">
+                <span class="px-3.5 py-1 rounded-full bg-amber-500/20 text-amber-400 text-xs font-extrabold uppercase tracking-wider inline-flex items-center gap-1.5 border border-amber-500/30">
+                    <i class="fa-solid fa-bolt text-amber-400"></i> Hızlı Çekici Formu
+                </span>
+                <h2 class="text-2xl sm:text-4xl font-black text-white mt-3 uppercase font-heading">
+                    Online Çekici Talebi Oluştur
+                </h2>
+                <p class="text-sm sm:text-base text-gray-400 mt-2 max-w-xl mx-auto">
+                    Konumunuzu ve araç bilgilerinizi iletin; ekibimiz anında telefonla arayarak en kısa sürede yola çıksın!
+                </p>
+            </div>
+
+            <!-- Form -->
+            <form action="{{ url_for('request_tow') }}" method="POST" class="space-y-6">
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- Ad Soyad -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                            Adınız Soyadınız <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-500">
+                                <i class="fa-solid fa-user"></i>
+                            </span>
+                            <input type="text" name="full_name" required 
+                                value="{% if current_user %}{{ current_user.full_name }}{% endif %}"
+                                placeholder="Örn: Mehmet Kaya" 
+                                class="w-full pl-10 pr-4 py-3 bg-gray-800/90 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-sm">
+                        </div>
+                    </div>
+
+                    <!-- Telefon Numarası -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                            Telefon Numaranız <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-500">
+                                <i class="fa-solid fa-phone"></i>
+                            </span>
+                            <input type="tel" name="phone" required 
+                                value="{% if current_user %}{{ current_user.phone }}{% endif %}"
+                                placeholder="05XX XXX XX XX" 
+                                class="w-full pl-10 pr-4 py-3 bg-gray-800/90 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-sm">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- Nereden / Konumunuz -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                            Bulunduğunuz Konum / İlçe / Sokak <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-red-500">
+                                <i class="fa-solid fa-location-crosshairs"></i>
+                            </span>
+                            <input type="text" name="location_from" required 
+                                placeholder="Örn: Bağcılar Meydan / E-5 üzeri" 
+                                class="w-full pl-10 pr-4 py-3 bg-gray-800/90 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-sm">
+                        </div>
+                    </div>
+
+                    <!-- Nereye / Teslim Yeri -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                            Götürülecek Yer / Servis (İsteğe Bağlı)
+                        </label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-emerald-500">
+                                <i class="fa-solid fa-flag-checkered"></i>
+                            </span>
+                            <input type="text" name="location_to" 
+                                placeholder="Örn: Oto Sanayi / Servis veya Ev" 
+                                class="w-full pl-10 pr-4 py-3 bg-gray-800/90 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-sm">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- Araç Modeli & Plaka -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                            Araç Marka / Model & Plaka
+                        </label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-500">
+                                <i class="fa-solid fa-car"></i>
+                            </span>
+                            <input type="text" name="car_info" 
+                                placeholder="Örn: Renault Megane - 34 ABC 123" 
+                                class="w-full pl-10 pr-4 py-3 bg-gray-800/90 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-sm">
+                        </div>
+                    </div>
+
+                    <!-- Arıza / Durum Açıklaması -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                            Arıza / Hasar Durumu (İsteğe Bağlı)
+                        </label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-500">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </span>
+                            <input type="text" name="issue_description" 
+                                placeholder="Örn: Akü bitti / Marş basmıyor / Kaza" 
+                                class="w-full pl-10 pr-4 py-3 bg-gray-800/90 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-sm">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gönder Butonu -->
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black text-base rounded-xl shadow-xl shadow-amber-500/25 uppercase tracking-wider flex items-center justify-center gap-2 transition-all">
+                    <i class="fa-solid fa-paper-plane"></i> ÇEKİCİ TALEBİNİ İLET (EN KISA SÜREDE ARAYALIM)
+                </button>
+
+                <p class="text-center text-xs text-gray-400 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-headset text-amber-500"></i> Acil durumlarda doğrudan arayabilirsiniz: 
+                    <a href="tel:{{ settings.primary_phone }}" class="text-amber-400 font-bold hover:underline">{{ settings.primary_phone }}</a>
+                </p>
+            </form>
+        </div>
+
     </div>
 </section>
 
